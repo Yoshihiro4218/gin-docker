@@ -21,8 +21,16 @@ func main() {
 	r.GET("/hello/:num", func(c *gin.Context) {
 		key := c.Param("num")
 		c.JSON(200, gin.H{
-			"message": key,
+			"hello": key,
 		})
+	})
+
+	// このリクエストは /welcome?firstname=Jane&lastname=Doe へ返答する
+	r.GET("/welcome", func(c *gin.Context) {
+		firstname := c.DefaultQuery("firstname", "Guest") // Geustはデフォルト値?
+		lastname := c.Query("lastname") // c.Request.URL.Query().Get("lastname") のショートカット
+
+		c.String(http.StatusOK, "Hello %s %s", firstname, lastname)
 	})
 
 	r.LoadHTMLGlob("templates/*.tmpl")
